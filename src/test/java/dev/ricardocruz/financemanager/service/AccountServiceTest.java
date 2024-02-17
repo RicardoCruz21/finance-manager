@@ -4,22 +4,22 @@ import dev.ricardocruz.financemanager.dto.AccountCreationRequest;
 import dev.ricardocruz.financemanager.entity.Account;
 import dev.ricardocruz.financemanager.repository.AccountRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 
+@ExtendWith(MockitoExtension.class)
 public class AccountServiceTest {
 
+    @Mock
     private AccountRepository accountRepository;
-    private AccountService accountService;
-
-    @BeforeEach
-    public void setup() {
-        accountRepository = Mockito.mock(AccountRepository.class);
-        accountService = new AccountServiceImpl(accountRepository);
-    }
+    @InjectMocks
+    private AccountServiceImpl accountService;
 
     @Test
     public void testCreateAccount() {

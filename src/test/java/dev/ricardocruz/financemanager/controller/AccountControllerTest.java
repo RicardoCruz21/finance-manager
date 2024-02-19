@@ -59,8 +59,6 @@ public class AccountControllerTest {
         request.setAccountName("Bills");
         request.setAccountBalance(new BigDecimal("1945.67"));
 
-        Account mockAccount = new Account(1L, request.getAccountName(), request.getAccountBalance());
-
         doReturn(null).when(accountService).createAccount(Mockito.any(AccountCreationRequest.class));
 
         ResultActions response = mockMvc.perform(post("/accounts")

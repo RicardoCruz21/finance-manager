@@ -7,10 +7,14 @@ import dev.ricardocruz.financemanager.exception.AccountServiceException;
 import dev.ricardocruz.financemanager.mapper.AccountMapper;
 import dev.ricardocruz.financemanager.model.AccountResponse;
 import dev.ricardocruz.financemanager.repository.AccountRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AccountServiceImpl implements AccountService{
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AccountServiceImpl.class);
 
     private final AccountRepository accountRepository;
 
@@ -25,6 +29,7 @@ public class AccountServiceImpl implements AccountService{
             newAccount = accountRepository.save(AccountMapper.mapToEntity(accountDto));
             return buildSuccessResponse(newAccount, AccountConstants.SUCCESS_ACCOUNT_CREATED);
         } catch (Exception ex) {
+            LOGGER.error("AccountServiceImpl:createAccount Issue in saving to account to repository " + ex.getMessage(), ex);
             throw new AccountServiceException(AccountConstants.ERROR_ACCOUNT_CREATED, ex);
         }
     }

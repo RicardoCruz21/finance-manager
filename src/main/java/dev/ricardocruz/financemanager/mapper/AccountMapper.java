@@ -3,6 +3,9 @@ package dev.ricardocruz.financemanager.mapper;
 import dev.ricardocruz.financemanager.dto.AccountDto;
 import dev.ricardocruz.financemanager.entity.Account;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AccountMapper {
 
     public static AccountDto mapToDto(Account account) {
@@ -19,5 +22,13 @@ public class AccountMapper {
         account.setAccountName(accountDto.getAccountName());
         account.setAccountBalance(accountDto.getAccountBalance());
         return account;
+    }
+
+    public static List<AccountDto> mapToDtoList(List<Account> accounts) {
+        List<AccountDto> accountDtoList = new ArrayList<>();
+        for (Account account : accounts) {
+            accountDtoList.add(mapToDto(account));
+        }
+        return accountDtoList;
     }
 }

@@ -1,14 +1,12 @@
 package dev.ricardocruz.financemanager.controller;
 
 import dev.ricardocruz.financemanager.dto.AccountDto;
+import dev.ricardocruz.financemanager.model.AccountListResponse;
 import dev.ricardocruz.financemanager.model.AccountResponse;
 import dev.ricardocruz.financemanager.service.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
@@ -19,6 +17,12 @@ public class AccountController {
 
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
+    }
+
+    @GetMapping()
+    public ResponseEntity<AccountListResponse> getAllAccounts() {
+        AccountListResponse accountListResponse = accountService.getAllAccounts();
+        return ResponseEntity.status(HttpStatus.OK).body(accountListResponse);
     }
 
     @PostMapping

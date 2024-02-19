@@ -5,7 +5,6 @@ import dev.ricardocruz.financemanager.dto.AccountCreationRequest;
 import dev.ricardocruz.financemanager.entity.Account;
 import dev.ricardocruz.financemanager.service.AccountService;
 import org.hamcrest.CoreMatchers;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ import java.math.BigDecimal;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-@WebMvcTest
+@WebMvcTest(AccountController.class)
 public class AccountControllerTest {
 
     @Autowired
@@ -36,17 +35,21 @@ public class AccountControllerTest {
     @Test
     public void testCreateNewAccountSuccess() throws Exception {
 
+        AccountCreationRequest request = new AccountCreationRequest();
+        request.setAccountName("Bills");
+        request.setAccountBalance(new BigDecimal("1945.67"));
+
         Account billsAccount = new Account(1L, "Bills", new BigDecimal("1945.67"));
 
         doReturn(billsAccount).when(accountService).createAccount(Mockito.any(AccountCreationRequest.class));
 
         ResultActions response = mockMvc.perform(post("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(billsAccount)));
+                .content(objectMapper.writeValueAsString(request)));
 
         response.andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.is(billsAccount.getId())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.accountName", Matchers.is(billsAccount.getAccountName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.accountName", CoreMatchers.is(billsAccount.getAccountName())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.accountBalance", CoreMatchers.is(billsAccount.getAccountBalance())));
     }
 

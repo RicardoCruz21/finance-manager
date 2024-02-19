@@ -16,7 +16,7 @@ public class AccountMapper {
     public static Account mapToEntity(AccountDto accountDto) {
         Account account = new Account();
         account.setId(accountDto.getId());
-        account.setAccountName(account.getAccountName());
+        account.setAccountName(accountDto.getAccountName());
         account.setAccountBalance(accountDto.getAccountBalance());
         return account;
     }

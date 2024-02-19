@@ -29,7 +29,7 @@ public class AccountServiceImpl implements AccountService{
             newAccount = accountRepository.save(AccountMapper.mapToEntity(accountDto));
             return buildSuccessResponse(newAccount, AccountConstants.SUCCESS_ACCOUNT_CREATED);
         } catch (Exception ex) {
-            LOGGER.error("AccountServiceImpl:createAccount Issue in saving to account to repository " + ex.getMessage(), ex);
+            LOGGER.error("AccountServiceImpl:createAccount Issue in saving account to repository " + ex.getMessage(), ex);
             throw new AccountServiceException(AccountConstants.ERROR_ACCOUNT_CREATED, ex);
         }
     }

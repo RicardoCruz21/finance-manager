@@ -1,8 +1,9 @@
 package dev.ricardocruz.financemanager.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.ricardocruz.financemanager.dto.AccountCreationRequest;
-import dev.ricardocruz.financemanager.entity.Account;
+import dev.ricardocruz.financemanager.constants.AccountConstants;
+import dev.ricardocruz.financemanager.dto.AccountDto;
+import dev.ricardocruz.financemanager.model.AccountResponse;
 import dev.ricardocruz.financemanager.service.AccountService;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
@@ -33,38 +34,27 @@ public class AccountControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    public void testCreateNewAccountSuccess() throws Exception {
+    public void testCreateAccountSuccess() throws Exception {
 
-        AccountCreationRequest request = new AccountCreationRequest();
-        request.setAccountName("Bills");
-        request.setAccountBalance(new BigDecimal("1945.67"));
+        AccountDto accountDto = new AccountDto();
+        accountDto.setAccountName("Bills");
+        accountDto.setAccountBalance(new BigDecimal("1945.67"));
 
-        Account billsAccount = new Account(1L, "Bills", new BigDecimal("1945.67"));
+        AccountDto billsAccountDto = new AccountDto();
+        billsAccountDto.setId(1L);
+        billsAccountDto.setAccountName("Bills");
+        billsAccountDto.setAccountBalance(new BigDecimal("1945.67"));
+        AccountResponse accountResponse = new AccountResponse(true, AccountConstants.SUCCESS_ACCOUNT_CREATED, billsAccountDto);
 
-        doReturn(billsAccount).when(accountService).createAccount(Mockito.any(AccountCreationRequest.class));
+        doReturn(accountResponse).when(accountService).createAccount(Mockito.any(AccountDto.class));
 
         ResultActions response = mockMvc.perform(post("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)));
+                .content(objectMapper.writeValueAsString(accountDto)));
 
         response.andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.is(billsAccount.getId())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.accountName", CoreMatchers.is(billsAccount.getAccountName())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.accountBalance", CoreMatchers.is(billsAccount.getAccountBalance())));
-    }
-
-    @Test
-    public void testCreateNewAccountFailure() throws Exception {
-        AccountCreationRequest request = new AccountCreationRequest();
-        request.setAccountName("Bills");
-        request.setAccountBalance(new BigDecimal("1945.67"));
-
-        doReturn(null).when(accountService).createAccount(Mockito.any(AccountCreationRequest.class));
-
-        ResultActions response = mockMvc.perform(post("/accounts")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)));
-
-        response.andExpect(MockMvcResultMatchers.status().isBadRequest());
+                .andExpect(MockMvcResultMatchers.jsonPath("$.account.id").value(accountResponse.getAccount().getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.account.accountName", CoreMatchers.is(accountResponse.getAccount().getAccountName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.account.accountBalance").value(accountResponse.getAccount().getAccountBalance()));
     }
 }

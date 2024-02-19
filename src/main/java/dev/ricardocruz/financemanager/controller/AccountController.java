@@ -1,8 +1,7 @@
 package dev.ricardocruz.financemanager.controller;
 
-import dev.ricardocruz.financemanager.dto.AccountCreationRequest;
-import dev.ricardocruz.financemanager.entity.Account;
-import dev.ricardocruz.financemanager.model.FinanceManagerResponse;
+import dev.ricardocruz.financemanager.dto.AccountDto;
+import dev.ricardocruz.financemanager.model.AccountResponse;
 import dev.ricardocruz.financemanager.service.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +22,8 @@ public class AccountController {
     }
 
     @PostMapping
-    public ResponseEntity<FinanceManagerResponse<Account>> createNewAccount(@RequestBody AccountCreationRequest request) {
-        Account createdAccount = accountService.createAccount(request);
-        if (createdAccount != null) {
-            return new ResponseEntity<>(FinanceManagerResponse.success(createdAccount), HttpStatus.CREATED);
-        } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error: bad request submitted");
-        }
+    public ResponseEntity<AccountResponse> createAccount(@RequestBody AccountDto accountDto) {
+        AccountResponse accountResponse = accountService.createAccount(accountDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(accountResponse);
     }
 }

@@ -1,5 +1,6 @@
 package dev.ricardocruz.financemanager.service;
 
+import dev.ricardocruz.financemanager.constants.AccountConstants;
 import dev.ricardocruz.financemanager.dto.AccountDto;
 import dev.ricardocruz.financemanager.entity.Account;
 import dev.ricardocruz.financemanager.exception.AccountServiceException;
@@ -12,8 +13,6 @@ import org.springframework.stereotype.Service;
 public class AccountServiceImpl implements AccountService{
 
     private final AccountRepository accountRepository;
-    private final String SUCCESS_ACCOUNT_CREATED = "Success: Account created successfully!";
-    private final String ERROR_ACCOUNT_CREATED = "Error: Something went wrong when creating the account.";
 
     public AccountServiceImpl(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
@@ -24,9 +23,9 @@ public class AccountServiceImpl implements AccountService{
         Account newAccount;
         try {
             newAccount = accountRepository.save(AccountMapper.mapToEntity(accountDto));
-            return buildSuccessResponse(newAccount, SUCCESS_ACCOUNT_CREATED);
+            return buildSuccessResponse(newAccount, AccountConstants.SUCCESS_ACCOUNT_CREATED);
         } catch (Exception ex) {
-            throw new AccountServiceException(ERROR_ACCOUNT_CREATED, ex);
+            throw new AccountServiceException(AccountConstants.ERROR_ACCOUNT_CREATED, ex);
         }
     }
 

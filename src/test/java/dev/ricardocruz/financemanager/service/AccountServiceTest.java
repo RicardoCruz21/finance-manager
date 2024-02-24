@@ -38,4 +38,7 @@ public class AccountServiceTest {
         Assertions.assertEquals(mockAccount.getAccountName(), accountResponse.getAccount().getAccountName());
         Assertions.assertEquals(mockAccount.getAccountBalance(), accountResponse.getAccount().getAccountBalance());
     }
+
+    @Test
+    public void testBuildSuccessAccountResponse() {}
 }
